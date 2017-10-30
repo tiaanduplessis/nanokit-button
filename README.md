@@ -55,6 +55,8 @@
 
 ## About
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/tiaanduplessis/nanokit-button.svg)](https://greenkeeper.io/)
+
 A simple customizable button component for [React Native](https://facebook.github.io/react-native/). Uses [TouchableOpacity](https://facebook.github.io/react-native/docs/touchableopacity.html) on iOS and [TouchableNativeFeedback](https://facebook.github.io/react-native/docs/touchablenativefeedback.html) on Android.
 
 ## Install
