@@ -11,19 +11,29 @@ import PropTypes from 'prop-types'
 
 const isAndroid = Platform.OS === 'android'
 
-const Button = ({
-  disabled,
-  style,
-  textStyle,
-  disabledStyle,
-  disabledTextStyle,
-  text,
-  width,
-  height,
-  children,
-  background,
-  ...otherProps
-}) => {
+const Button = props => {
+  const resolvedProps = { ...props }
+  const defaults = Button.defaultProps
+  if (defaults) {
+    for (const key in defaults) {
+      if (resolvedProps[key] === undefined) resolvedProps[key] = defaults[key]
+    }
+  }
+
+  let {
+    disabled,
+    style,
+    textStyle,
+    disabledStyle,
+    disabledTextStyle,
+    text,
+    width,
+    height,
+    children,
+    background,
+    ...otherProps
+  } = resolvedProps
+
   if (disabled) {
     return (
       <View
@@ -71,13 +81,20 @@ const Button = ({
   )
 }
 
+const stylePropType = (Text.propTypes && Text.propTypes.style) || PropTypes.oneOfType([
+  PropTypes.object,
+  PropTypes.number,
+  PropTypes.arrayOf((...args) => stylePropType(...args)),
+  PropTypes.oneOf([false, ''])
+])
+
 Button.propTypes = {
   ...TouchableOpacity.propTypes,
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  textStyle: Text.propTypes.style,
-  disabledTextStyle: Text.propTypes.style,
-  disabledStyle: Text.propTypes.style
+  textStyle: stylePropType,
+  disabledTextStyle: stylePropType,
+  disabledStyle: stylePropType
 }
 
 Button.defaultProps = {

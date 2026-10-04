@@ -16,6 +16,12 @@ if (!process.env.BUTTON_TEST_MODE) {
     if (result.error) throw result.error
     assert.strictEqual(result.status, 0, mode + ' tests failed')
   }
+  const modern = childProcess.spawnSync(process.execPath, [path.join(__dirname, 'modern.js')], {
+    env: process.env,
+    stdio: 'inherit'
+  })
+  if (modern.error) throw modern.error
+  assert.strictEqual(modern.status, 0, 'modern JSX contract tests failed')
 } else {
   run()
 }
@@ -288,14 +294,15 @@ function run () {
         assert.deepStrictEqual(messages, [])
         assert.strictEqual(callbackCalls, 0)
       })
-      test('missing Text.propTypes still fails at import as an existing compatibility limit', function () {
+      test('missing Text.propTypes uses a portable style validator', function () {
         function MissingText (props) { return React.createElement('NativeText', props) }
         const beforeStyles = styleCalls.length
         const beforeBackgrounds = backgroundCalls.length
-        assert.throws(function () { load(Object.assign({}, native, { Text: MissingText })) }, function (error) {
-          return error instanceof TypeError && /style/.test(error.message)
-        })
-        assert.strictEqual(styleCalls.length, beforeStyles)
+        const PortableButton = load(Object.assign({}, native, { Text: MissingText })).default
+        for (const key of ['textStyle', 'disabledTextStyle', 'disabledStyle']) {
+          assert.strictEqual(typeof PortableButton.propTypes[key], 'function')
+        }
+        assert.strictEqual(styleCalls.length, beforeStyles + 1)
         assert.strictEqual(backgroundCalls.length, beforeBackgrounds)
       })
     }
