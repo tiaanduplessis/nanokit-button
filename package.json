@@ -15,7 +15,8 @@
         "test": "npm run format",
         "format": "prettier-standard index.js",
         "start": "npm run test",
-        "precommit": "npm test"
+        "precommit": "npm test",
+        "test:regression": "node test/index.js"
     },
     "author": "tiaanduplessis <tiaanduplessis@hotmail.com>",
     "devDependencies": {
@@ -27,6 +28,6 @@
         "react-native": "*"
     },
     "dependencies": {
-        "prop-types": "^15.6.0"
+        "prop-types": "^15.8.1"
     }
 }
